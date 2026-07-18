@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local environments and IDE settings
+.venv/
+venv/
+.idea/
+.vscode/
+
+# Secrets and local configuration
+.env
+.env.*
+*.key
+*.pem
+
+# Licensed/raw datasets are not distributed
+stock_news/
+dow30_news_with_sentiment.csv
+
+# Trained checkpoints are reproducible but too large for the source repository
+models/
+
+# Generated experiment outputs: keep only compact summaries and selected figures
+results/*
+!results/slides_figs/
+!results/slides_figs/*.png
+!results/backtest_metrics_summary_ALL_v5_ppo.csv
+!results/bootstrap_pairwise.csv
+!results/wf_summary.csv
+
+# Runtime artifacts
+*.log
+run_progress.json
+
+# Drafts, duplicate submissions, and presentation working files
+*.docx
+*.pptx
+*.html
+*.tmp
+~$*
+Photo/
+poster/
+屏幕截图*.png
+
+# Personal/assessment copies
+2526_*
+C.3_*
+FYP_Viva_Script_and_QA.md
+
+# One-off local diagnostics
+_check_threshold.py
+
+# Reports and posters contain student or assessment identifiers.
+# Add sanitized public copies separately before publishing them.
+*.pdf

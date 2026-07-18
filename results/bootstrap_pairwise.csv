@@ -1,0 +1,16 @@
+Comparison,Δ Sharpe,95% CI,Significant
+HKUST_Full vs HKUST_NoAttn,-0.365,"[-0.759, -0.005]",Yes
+HKUST_Full vs EODHD_Full,0.031,"[-0.326, 0.389]",No
+HKUST_Full vs EODHD_NoAttn,-0.07,"[-0.373, 0.218]",No
+HKUST_Full vs NONE_NoSent,-0.344,"[-0.686, -0.030]",Yes
+HKUST_Full vs NONE_Vanilla,0.004,"[-0.402, 0.418]",No
+HKUST_NoAttn vs EODHD_Full,0.395,"[-0.078, 0.897]",No
+HKUST_NoAttn vs EODHD_NoAttn,0.294,"[-0.028, 0.641]",No
+HKUST_NoAttn vs NONE_NoSent,0.023,"[-0.428, 0.480]",No
+HKUST_NoAttn vs NONE_Vanilla,0.368,"[-0.082, 0.843]",No
+EODHD_Full vs EODHD_NoAttn,-0.101,"[-0.527, 0.319]",No
+EODHD_Full vs NONE_NoSent,-0.375,"[-0.828, 0.066]",No
+EODHD_Full vs NONE_Vanilla,-0.023,"[-0.504, 0.454]",No
+EODHD_NoAttn vs NONE_NoSent,-0.273,"[-0.658, 0.108]",No
+EODHD_NoAttn vs NONE_Vanilla,0.076,"[-0.265, 0.429]",No
+NONE_NoSent vs NONE_Vanilla,0.351,"[-0.118, 0.831]",No
