@@ -23,7 +23,7 @@ This project asks: **does domain-specific financial sentiment improve out-of-sam
 | Period | 2022-01-01 to 2025-12-31 |
 | Price data | Daily OHLCV via `yfinance` |
 | Features per asset | Daily return, 20-day rolling volatility, volume change, MACD histogram, RSI, sentiment |
-| News corpus | 310,648 articles, scored locally with a domain-specific FinBERT-tone model |
+| News corpus | 310,648 articles, scored locally with `yiyanghkust/finbert-tone` (HKUST FinBERT) |
 | Sentiment score | `P(positive) − P(negative)` ∈ [−1, 1], mean-aggregated per ticker-day and aligned to trading dates |
 | Generic baseline | Non-domain-adapted sentiment scores from a commercial data API |
 
@@ -150,4 +150,4 @@ Seeds are fixed at 42, 123, and 2024. Preprocessing statistics are fitted on the
 
 ---
 
-*This summary condenses an undergraduate final-year research project in Data Science and Big Data Technology. Third-party components — the FinBERT-tone sentiment model, `stable-baselines3`, Hugging Face `transformers`, and market data providers — remain under their respective licences.*
+*This summary condenses an undergraduate final-year research project in Data Science and Big Data Technology. Third-party components — `yiyanghkust/finbert-tone`, `stable-baselines3`, Hugging Face `transformers`, and market data providers — remain under their respective licences.*
