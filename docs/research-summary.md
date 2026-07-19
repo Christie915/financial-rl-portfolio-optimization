@@ -41,7 +41,7 @@ The state is a `(T, N, F)` tensor — trading day × asset × feature — with t
 - **Algorithm:** PPO (`stable-baselines3`), chosen for its stability under a clipped surrogate objective.
 - **Observation:** 5-day sliding window over all features for 31 tokens (30 assets + cash), each token carrying its own current portfolio weight.
 - **Action:** 31-dimensional continuous vector in [−3, 3], softmax-transformed into long-only weights summing to one. The bounded range avoids the near-one-hot allocations that unbounded logits produce.
-- **Reward:** `100 × (R_net − 0.1 × σ_recent)`, where `R_net` is the daily portfolio return net of transaction costs and `σ_recent` is the volatility of the most recent return window.
+- **Reward:** `100 × (R_net − 0.1 × σ_20)`, where `R_net` is the daily portfolio return net of transaction costs and `σ_20` is the standard deviation of up to the 20 most recent net daily returns (using fewer observations during warm-up).
 - **Transaction costs:** 1 bp per unit turnover, measured as the L1 norm of the weight change against *drift-adjusted* previous weights, so passive price drift is not charged as turnover.
 - **Optional cross-asset attention:** 4-head self-attention over the 31 tokens, embedding dimension 128, with residual connections and layer normalisation.
 - **Training:** 400,000 environment steps per configuration per seed; lr 3e-4, rollout 2048, minibatch 256, 10 epochs, γ 0.99, GAE λ 0.95, clip 0.2, entropy coefficient 0.005.
@@ -80,17 +80,17 @@ This is the part of the project that matters most, and the part most likely to d
 
 The alpha ladder — domain +7.71% > generic +0.51% > none +0.12% — indicates that **sentiment source quality, not architectural complexity, is the dominant lever** in this setting.
 
-### 5.2 Classical baselines, same period and cost model
+### 5.2 Classical baselines under the same cost model
 
-| Strategy | Return % | Sharpe | MDD % |
-|---|---:|---:|---:|
-| Mean-variance (constrained QP) | −1.40 | 0.025 | 18.10 |
-| Minimum-variance (constrained QP) | 2.74 | 0.329 | 10.61 |
-| Risk parity (inverse volatility) | 13.03 | 1.091 | 11.22 |
-| Equal weight | 18.36 | 1.133 | — |
-| PPO, domain sentiment (median) | 26.07 | 1.411 | 14.22 |
+| Strategy | Return % | Sharpe | MDD % | Alpha % |
+|---|---:|---:|---:|---:|
+| Mean-variance (constrained QP) | −1.40 | 0.025 | 18.10 | −18.19 |
+| Minimum-variance (constrained QP) | 2.74 | 0.329 | 10.61 | −14.05 |
+| Risk parity (inverse volatility) | 13.03 | 1.091 | 11.22 | −3.76 |
+| Equal weight (243-day benchmark) | 18.36 | 1.133 | — | 0.00 |
+| PPO, domain sentiment (median) | 26.07 | 1.411 | 14.22 | +7.71 |
 
-Rolling strategies use a 60-day estimation window and are therefore evaluated over ~183 rather than 243 trading days. Mean-variance optimisation underperforms badly, consistent with the well-documented instability of sample-covariance Markowitz allocation when asset count approaches window length.
+Alpha is computed against equal weight over each strategy's own evaluation interval. The rolling classical strategies use a 60-day estimation window and are therefore evaluated over ~183 trading days, for which equal weight returned 16.79%; PPO and the displayed equal-weight row cover 243 days, for which equal weight returned 18.36%. Mean-variance optimisation underperforms badly, consistent with the well-documented instability of sample-covariance Markowitz allocation when asset count approaches window length.
 
 ### 5.3 Walk-forward consistency
 
@@ -123,7 +123,7 @@ A Sharpe spread of **0.69** and a return spread of **12.5 percentage points** ar
 
 These are retained deliberately.
 
-**The advantage over a no-sentiment baseline is not statistically significant at three seeds.** The bootstrap probability that the domain-sentiment configuration outperforms the generic-sentiment baseline is 0.961, whereas the corresponding probability against the no-sentiment baseline is **0.537**. The economic difference in medians is large; the formal statistical confirmation is not there at this seed count, and the results should be read accordingly.
+**The advantage over a no-sentiment baseline is not established at three seeds.** The bootstrap probability that the domain-sentiment configuration outperforms the generic-sentiment baseline is 0.961, whereas the corresponding probability against the no-sentiment baseline is **0.537**. The economic difference in medians is large, but the bootstrap comparison remains inconclusive at this seed count and the result should be read accordingly.
 
 **Cross-asset attention hurt performance here.** Adding attention to the domain-sentiment configuration reduced median Sharpe from 1.411 to 1.147 and alpha from +7.71% to −0.42%. A capacity argument explains why this is plausible rather than anomalous: the attention block adds 66,304 parameters, while the Dow 30 over three training years supplies only 31 × 750 = 23,250 token-days. The resulting data-to-parameter ratio is **0.35**, roughly 30 times below a simple 10-observations-per-parameter heuristic. This is not a formal threshold, but it motivates a testable hypothesis for a larger-universe, longer-horizon study rather than a general claim that attention does not work.
 
