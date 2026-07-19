@@ -45,6 +45,9 @@ These figures are medians across seeds. Results varied materially by random
 seed, which is why the repository reports distributions and cross-fold
 consistency rather than relying on a single run.
 
+A fuller account of the methodology, ablation results, seed variance, and known
+limitations is available in [docs/research-summary.md](docs/research-summary.md).
+
 ![Walk-forward comparison](results/slides_figs/walkforward.png)
 
 ![Seed variance](results/slides_figs/seed_variance.png)
@@ -117,7 +120,7 @@ python -m pytest -q
 ## Reproducibility notes
 
 - Random seeds are fixed at `42`, `123`, and `2024`.
-- Preprocessing statistics can be fitted on the training window only.
+- Preprocessing statistics are fitted on the training window only.
 - Validation data are used for checkpoint selection, not parameter updates.
 - Test folds remain chronologically separated from training.
 - Transaction costs are included in the portfolio environment and backtests.
@@ -128,3 +131,17 @@ python -m pytest -q
 Xuanzhe Li  
 BEng (Hons) Data Science and Big Data Technology  
 Xi'an Jiaotong-Liverpool University / University of Liverpool
+
+## Licence and attribution
+
+This repository is released under the MIT Licence. It builds on third-party
+components that remain under their own terms:
+
+- Sentiment model: FinBERT-tone (domain-adapted BERT variant), used for
+  inference only
+- `stable-baselines3` - MIT Licence
+- Hugging Face `transformers` - Apache Licence 2.0
+- `gymnasium`, `pandas`, `numpy`, and `scipy` - respective open-source licences
+- Market data accessed via `yfinance`; news sentiment baseline obtained from a
+  commercial data provider. Neither dataset is redistributed in this
+  repository.
